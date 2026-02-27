@@ -1,0 +1,14 @@
+{
+  "name": "aws-devops-project",
+  "version": "1.0.0",
+  "description": "AWS DevOps CI/CD Project using Jenkins",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Subha",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
