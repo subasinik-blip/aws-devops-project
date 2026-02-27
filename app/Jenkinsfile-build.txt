@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Clone Code') {
+            steps {
+                git 'https://github.com/subasinik-blip/aws-devops-project.git'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                dir('app') {
+                    sh 'npm install'
+                }
+            }
+        }
+
+        stage('Build Complete') {
+            steps {
+                echo "Build Success ✅"
+            }
+        }
+    }
+}

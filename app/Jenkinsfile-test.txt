@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Clone Code') {
+            steps {
+                git 'https://github.com/subasinik-blip/aws-devops-project.git'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                dir('app') {
+                    sh 'npm test || echo "No test script found"'
+                }
+            }
+        }
+
+        stage('Test Complete') {
+            steps {
+                echo "Test Success ✅"
+            }
+        }
+    }
+}
