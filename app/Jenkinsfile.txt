@@ -1,51 +1,34 @@
 pipeline {
     agent any
 
-    environment {
-        EC2_USER = "ec2-user"
-        EC2_IP = "13.53.205.200"
-    }
-
     stages {
+
+        stage('Clone') {
+            steps {
+                git 'https://github.com/subasinik-blip/aws-devops-project.git'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                dir('app') {
+                    sh 'npm install'
+                }
+            }
+        }
 
         stage('Build') {
             steps {
-                echo 'Installing Dependencies...'
-                sh 'npm install'
+                echo "Build stage completed"
             }
         }
 
-        stage('Test') {
+        stage('Run Application') {
             steps {
-                echo 'Testing Application...'
-                sh 'node server.js &'
-                sh 'sleep 5'
-                sh 'pkill node'
+                dir('app') {
+                    sh 'nohup node server.js &'
+                }
             }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo 'Deploying to EC2...'
-                sh """
-                ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_IP} '
-                    cd aws-devops-project/app &&
-                    git pull &&
-                    npm install &&
-                    pkill node || true &&
-                    nohup node server.js > app.log 2>&1 &
-                '
-                """
-            }
-        }
-    }
-
-    post {
-        success {
-            echo 'Pipeline executed successfully 🚀'
-        }
-        failure {
-            echo 'Pipeline failed ❌'
         }
     }
 }
